@@ -1,22 +1,19 @@
-import requests
-import urllib3
-
-# Disabilita il warning SSL
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+import urllib.request
+import ssl
 
 url = "https://raw.githubusercontent.com/Invenit-dev/Eaton-Xmoem-Online/main/QT_ITA-Offerta_Xmoem_v6.py"
 local_filename = "QT_ITA-Offerta_Xmoem_v6.py"
 
+# Crea un contesto SSL che ignora la verifica del certificato
+ssl_context = ssl._create_unverified_context()
+
 try:
-    # Scarica il file ignorando la verifica SSL
-    response = requests.get(url, verify=False)
-    response.raise_for_status()
+    with urllib.request.urlopen(url, context=ssl_context) as response:
+        content = response.read().decode("utf-8")
 
-    # Salva localmente
     with open(local_filename, "w", encoding="utf-8") as f:
-        f.write(response.text)
+        f.write(content)
 
-    # Esegui lo script scaricato
     exec(open(local_filename, encoding="utf-8").read())
 
 except Exception as e:
