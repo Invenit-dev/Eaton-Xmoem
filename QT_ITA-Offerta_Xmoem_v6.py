@@ -1,13 +1,15 @@
 import requests
-import os
+import urllib3
 
-# URL raw del file su GitHub
+# Disabilita il warning SSL
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 url = "https://raw.githubusercontent.com/Invenit-dev/Eaton-Xmoem-Online/main/QT_ITA-Offerta_Xmoem_v6.py"
 local_filename = "QT_ITA-Offerta_Xmoem_v6.py"
 
 try:
-    # Scarica il file
-    response = requests.get(url)
+    # Scarica il file ignorando la verifica SSL
+    response = requests.get(url, verify=False)
     response.raise_for_status()
 
     # Salva localmente
